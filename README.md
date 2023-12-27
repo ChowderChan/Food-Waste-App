@@ -9,6 +9,7 @@ Realizarea unei aplicații web prin care utilizatorii pot să ofere alimente pe 
 Descriere
 
 Aplicația încurajează utilizatorii să conștientizeze risipa de alimente într-un mod distractiv și bazat pe comunitate 
+
 Funcționalități
 
 Ca utilizator pot sa fac o lista de alimente organizată pe categorii cu ce am în frigider
