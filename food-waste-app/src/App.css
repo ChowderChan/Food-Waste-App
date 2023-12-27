@@ -1,38 +1,73 @@
-.App {
-  text-align: center;
+body 
+{
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f8f8;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.navbar 
+{
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  justify-content: space-between;
+  background-color: #00b03e;
+  padding: 0px 50px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.75);
 }
 
-.App-link {
-  color: #61dafb;
+#logo
+{
+  width: 150px;
+  height: 150px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.welcome
+{
+  color: #ffffff;
+  font-weight: bolder;
+  font-size: 40px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.75);
+}
+
+.username
+{
+  color:#ffffff;
+  font-weight: bolder;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.75);
+  font-size: 25px;
+}
+
+.content {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px; 
+}
+
+#fridge-list-header,
+#sharable-list-header,
+#friends-list-header
+{
+  color: rgba(0, 110, 52, 0.732);
+  margin-left: 5%;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.35);
+}
+
+#Fridge_List,
+#Sharable_List,
+#Friend_List
+{
+  list-style: none;
+  margin-top: 100px;
+  color: black;
+  margin-left: -575%;
+  border: 3px solid;
+  padding: 10px 10px;
+}
+
+#add_item
+{
+  margin-left: 30px;
+  margin-top: -20px;
 }

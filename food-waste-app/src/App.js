@@ -1,25 +1,44 @@
-import logo from "./logo.svg";
-import "./App.css";
-
-//import {sequelize} from './sequelize/sequelize.js'
+// App.js
+import React from 'react';
+import './App.css';
+import logo from './logo_no_bg.png'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <nav className="navbar">
+        <div>
+          <img src={logo} id='logo'/>
+        </div>
+        <div className='welcome'>
+          Welcome to your favourite Anti Food Waste App
+        </div>
+        <div className='username'>
+          <ul>
+            <li>User: [Username]</li>
+          </ul>
+        </div>
+      </nav>
+      <div className='content'>
+        <h2 id='fridge-list-header'>Fridge List<button id='add_item'>Adaugă aliment</button></h2>
+        <div>
+          <ul id='Fridge_List'>
+            <li>Item 1</li>
+          </ul>
+        </div>
+        <h2 id='sharable-list-header'>Sharable List<button id='add_item'>Adaugă aliment</button></h2>
+        <div>
+          <ul id='Sharable_List'>
+            <li>Item 1</li>
+          </ul>
+        </div>
+        <h2 id='friends-list-header'>Friends List<button id='add_item'>Adaugă prieten</button></h2>
+        <div>
+          <ul id='Friend_List'>
+            <li>Item 1</li>
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }
