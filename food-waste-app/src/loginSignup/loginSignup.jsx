@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import './loginSignup.css'
 import userIcon from '../assets/person.png'
 import passwordIcon from '../assets/password.png'
+import phoneIcon from '../assets/email.png'
 import axios from 'axios'
 
 const LoginSignup = () => {
@@ -9,6 +10,7 @@ const LoginSignup = () => {
     const [action, setAction] = useState("Sign Up")
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
 
     const handleAction = async () => {
         try {
@@ -17,6 +19,7 @@ const LoginSignup = () => {
                 const response = await axios.post('http://localhost:5000/register', {
                     username,
                     password,
+                    phoneNumber,
                 });
 
                 console.log(response.data); // Assuming your server returns a response
@@ -54,8 +57,11 @@ const LoginSignup = () => {
                     <img src={passwordIcon} alt="" />
                     <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
                 </div>
+                {action==="Login"?<div></div>: <div className="input">
+                    <img src={phoneIcon} alt="" />
+                    <input type="password" placeholder="Phone number" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)}/>
+                </div>}
             </div>
-           
             {action==="Sign Up"?<div></div>: <div className="forgotPassword">Forgot password?</div>}
             <div className="submitContainer">
                 <div className={action==="Login"?"submit gray":"submit"}

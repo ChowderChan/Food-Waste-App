@@ -9,7 +9,7 @@ const port = 5000;
 app.use(bodyParser.json());
 app.use(cors());
 
-const db = new sqlite3.Database('FoodWasteApp2.db'); // daca intampinam probleme cu POST, facem alt BD ( modificam numele bd-ului si apoi rulam iar node server.js )
+const db = new sqlite3.Database('FoodWasteApp3.db'); // daca intampinam probleme cu POST, facem alt BD ( modificam numele bd-ului si apoi rulam iar node server.js )
 
 // Assuming you have a 'users' table in the database with columns 'id', 'username', and 'password'
 
@@ -18,12 +18,13 @@ db.run(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL,
-    password TEXT NOT NULL
+    password TEXT NOT NULL,
+    phoneNumber TEXT NOT NULL
   )
 `);
 
 app.post('/register', (req, res) => {
-  const { username, password } = req.body;
+  const { username, password, phoneNumber } = req.body;
 
   // Check if the username already exists
   db.get('SELECT * FROM users WHERE username = ?', [username], (err, row) => {
@@ -37,7 +38,7 @@ app.post('/register', (req, res) => {
     }
 
     // Insert the new user into the database
-    db.run('INSERT INTO users (username, password) VALUES (?, ?)', [username, password], (err) => {
+    db.run('INSERT INTO users (username, password, phoneNumber) VALUES (?, ?, ?)', [username, password, phoneNumber], (err) => {
       if (err) {
         return res.status(500).json({ error: 'Registration failed' });
       }
