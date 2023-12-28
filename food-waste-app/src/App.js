@@ -3,12 +3,17 @@ import React from 'react';
 import './App.css';
 import logo from './logo_no_bg.png'
 import LoginSignup from './loginSignup/loginSignup';
+import AddFoodItem from './addFoodItem/addFoodItem';
+
 
 function App() {
   return (
     <div className="App">
       {/* <div>
         <LoginSignup/>
+      </div> */}
+      {/* <div>
+        <AddFoodItem/>
       </div> */}
       <nav className="navbar">
         <div>
