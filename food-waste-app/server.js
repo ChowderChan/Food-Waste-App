@@ -1,0 +1,70 @@
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const sqlite3 = require('sqlite3').verbose();
+
+const app = express();
+const port = 5000;
+
+app.use(bodyParser.json());
+app.use(cors());
+
+const db = new sqlite3.Database('FoodWasteApp2.db'); // daca intampinam probleme cu POST, facem alt BD ( modificam numele bd-ului si apoi rulam iar node server.js )
+
+// Assuming you have a 'users' table in the database with columns 'id', 'username', and 'password'
+
+// Create the users table if it doesn't exist
+db.run(`
+  CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL,
+    password TEXT NOT NULL
+  )
+`);
+
+app.post('/register', (req, res) => {
+  const { username, password } = req.body;
+
+  // Check if the username already exists
+  db.get('SELECT * FROM users WHERE username = ?', [username], (err, row) => {
+    if (err) {
+      return res.status(500).json({ error: 'Registration failed' });
+    }
+
+    // If the username already exists, return an error
+    if (row) {
+      return res.status(400).json({ error: 'Username already exists' });
+    }
+
+    // Insert the new user into the database
+    db.run('INSERT INTO users (username, password) VALUES (?, ?)', [username, password], (err) => {
+      if (err) {
+        return res.status(500).json({ error: 'Registration failed' });
+      }
+
+      res.json({ message: 'Registration successful' });
+    });
+  });
+});
+
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+  
+    // Check if the username and password match a user in the database
+    db.get('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], (err, row) => {
+      if (err) {
+        return res.status(500).json({ error: 'Login failed' });
+      }
+  
+      // If a user with the provided username and password is found, login is successful
+      if (row) {
+        res.json({ message: 'Login successful' });
+      } else {
+        res.status(401).json({ error: 'Invalid username or password' });
+      }
+    });
+  });
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
