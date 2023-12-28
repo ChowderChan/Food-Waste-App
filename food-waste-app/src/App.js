@@ -2,10 +2,14 @@
 import React from 'react';
 import './App.css';
 import logo from './logo_no_bg.png'
+import LoginSignup from './loginSignup/loginSignup';
 
 function App() {
   return (
     <div className="App">
+      {/* <div>
+        <LoginSignup/>
+      </div> */}
       <nav className="navbar">
         <div>
           <img src={logo} id='logo'/>
