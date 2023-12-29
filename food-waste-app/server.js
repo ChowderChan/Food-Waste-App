@@ -69,3 +69,28 @@ app.post('/login', (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+const db2 = new sqlite3.Database('FoodWasteApp3.db');
+
+db2.run(`
+  CREATE TABLE IF NOT EXISTS fridgeItems (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    idUser INTEGER NOT NULL,
+    category TEXT NOT NULL,
+    name TEXT NOT NULL,
+    date TEXT NOT NULL,
+    about TEXT NOT NULL
+  )
+`);
+
+app.post('/addFridgeItems', (req, res) => {
+  const { option, name, date, about } = req.body;
+
+  db.run('INSERT INTO users (username, password, phoneNumber) VALUES (?, ?, ?, ?)', [option, name, date, about], (err) => {
+    if (err) {
+      return res.status(500).json({ error: 'Registration failed' });
+    }
+
+    res.json({ message: 'Registration successful' });
+  });
+});

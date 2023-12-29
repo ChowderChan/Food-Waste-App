@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import './addFoodItem.css'
+import axios from 'axios'
 
 const AddFoodItem = () => {
 
@@ -16,6 +17,24 @@ const AddFoodItem = () => {
 
         setCategory(event.target.value)
     }
+    const [name, setName] = useState('');
+    const [date, setDate] = useState('');
+    const [about, setAbout] = useState('');
+
+    const handleAction = async () => {
+        try {
+            const response = await axios.post('http://localhost:5000/addFridgeItems', {
+                option,
+                name,
+                date,
+                about,
+            });
+
+            console.log(response.data);
+        } catch (error) {
+            console.error('Action failed', error.message);
+        }
+    };
 
     return(
         <div className="containerFridgeAdd">
@@ -26,20 +45,20 @@ const AddFoodItem = () => {
             <div className="inputsFridgeAdd">
                 <div className="inputFridgeAdd">
                     <select value={option} onChange={changeOption}>
-                        <option>Category</option>
+                        <option onChange={(e) => changeOption(e.target.value)}>Category</option>
                         {options.map(ctr => (
                             <option value={ctr.category}>{ctr.category}</option>
                         ))}
                     </select>
                 </div>
                 <div className="inputFridgeAdd">
-                    <input type="text" placeholder="Name" />
+                    <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
                 </div>
                 <div className="inputFridgeAdd">
-                    <input type="date"/>
+                    <input type="date" value={date} onChange={(e) => setDate(e.target.value)}/>
                 </div>
                 <div className="inputFridgeAddAbout">
-                    <textarea placeholder="About" />
+                    <textarea placeholder="About" value={about} onChange={(e) => setAbout(e.target.value)}/>
                 </div>
             </div>
             <div className="submitContainerFridgeAdd">
