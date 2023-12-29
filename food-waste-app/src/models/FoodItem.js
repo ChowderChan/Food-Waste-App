@@ -10,6 +10,11 @@ const FoodItem = sequelize.define(
         primaryKey: true, 
         autoIncrement: true
     },
+    idUser: {
+
+        type: DataTypes.INTEGER,
+        allowNull: false, 
+    },
     category: {
 
         type: DataTypes.STRING,
