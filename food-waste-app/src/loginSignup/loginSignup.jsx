@@ -4,6 +4,8 @@ import userIcon from '../assets/person.png'
 import passwordIcon from '../assets/password.png'
 import phoneIcon from '../assets/email.png'
 import axios from 'axios'
+// router
+import { useNavigate } from 'react-router-dom';
 
 const LoginSignup = () => {
 
@@ -11,6 +13,9 @@ const LoginSignup = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+
+    // Use the useNavigate function to get access to the navigation function
+  const navigate = useNavigate();  // Replace useHistory with useNavigate
 
     const handleAction = async () => {
         try {
@@ -35,6 +40,9 @@ const LoginSignup = () => {
                 console.log(response.data); // Assuming your server returns a response
 
                 // Handle successful login, e.g., redirect to the home page or show a success message
+                // Redirect to the main page (App.js) with the username parameter
+                navigate(`/app/${username}`);
+                
             }
         } catch (error) {
             console.error('Action failed', error.message);

@@ -5,11 +5,19 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import LoginSignup from './loginSignup/loginSignup';
 
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <LoginSignup />
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginSignup />} />
+        <Route path="/app/:username" element={<App />} />
+      </Routes>
+    </Router>
   </React.StrictMode>
+  
 );
 
 // If you want to start measuring performance in your app, pass a function

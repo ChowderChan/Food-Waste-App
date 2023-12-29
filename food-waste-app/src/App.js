@@ -5,16 +5,16 @@ import logo from './logo_no_bg.png'
 import LoginSignup from './loginSignup/loginSignup';
 import AddFoodItem from './addFoodItem/addFoodItem';
 
+import { useParams } from 'react-router-dom';
 
 function App() {
+
+  // Use the useParams hook to get access to the route parameters
+  const { username } = useParams();
+
   return (
+    
     <div className="App">
-      {/* <div>
-        <LoginSignup/>
-      </div> */}
-      {/* <div>
-        <AddFoodItem/>
-      </div> */}
       <nav className="navbar">
         <div>
           <img src={logo} id='logo'/>
@@ -24,7 +24,7 @@ function App() {
         </div>
         <div className='username'>
           <ul>
-            <li>User: [Username]</li>
+            <li>User: { username }</li>
           </ul>
         </div>
       </nav>
