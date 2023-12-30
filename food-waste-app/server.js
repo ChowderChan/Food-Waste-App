@@ -9,7 +9,7 @@ const port = 5000;
 app.use(bodyParser.json());
 app.use(cors());
 
-const db = new sqlite3.Database("FoodWasteApp6.db"); // daca intampinam probleme cu POST, facem alt BD ( modificam numele bd-ului si apoi rulam iar node server.js )
+const db = new sqlite3.Database("FoodWasteApp7.db"); // daca intampinam probleme cu POST, facem alt BD ( modificam numele bd-ului si apoi rulam iar node server.js )
 
 // Assuming you have a 'users' table in the database with columns 'id', 'username', and 'password'
 
@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS fridgeItems (
 db.run(`
 CREATE TABLE IF NOT EXISTS friends (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
   idUser INTEGER NOT NULL,
   tag TEXT NOT NULL,
   FOREIGN KEY (idUser) REFERENCES users(id)
@@ -97,6 +98,42 @@ app.post("/login", (req, res) => {
         res.json({ message: "Login successful" });
       } else {
         res.status(401).json({ error: "Invalid username or password" });
+      }
+    }
+  );
+});
+
+app.get("/getFridgeItems", (req, res) => {
+  db.all(
+    "SELECT * FROM fridgeItems WHERE idUser = ?",
+    [idLoggedUser],
+    (err, rows) => {
+      if (err) {
+        return res.status(500).json({ error: "Failed to get list of items" });
+      } else {
+        if (rows.length > 0) {
+          const fridgeItemsList = rows.map((row) => {
+            return {
+              id: row.id,
+              idUser: row.idUser,
+              category: row.category,
+              name: row.name,
+              date: row.date,
+              about: row.about,
+              shareable: row.shareable,
+            };
+          });
+
+          res.json({
+            message: "Login successful",
+            fridgeItems: fridgeItemsList,
+          });
+        } else {
+          res.json({
+            message: "Login successful",
+            fridgeItems: [],
+          });
+        }
       }
     }
   );
