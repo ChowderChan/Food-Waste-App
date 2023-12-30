@@ -1,4 +1,4 @@
-.containerFridgeAdd{
+.containerFriendAdd{
     display: flex;
     flex-direction: column;
     width: 800px;
@@ -9,7 +9,7 @@
     border-radius: 40px;
 }
 
-.headerFridgeAdd{
+.headerFriendAdd{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -18,7 +18,7 @@
     margin-top: 30px;
 }
 
-.textFridgeAdd{
+.textFriendAdd{
     color: #ffffff;
     font-weight: bolder;
     font-size: 40px;
@@ -26,7 +26,7 @@
     margin-top: 30px;
 }
 
-.underLineFridgeAdd{
+.underLineFriendAdd{
     color: #ffffff;
     width: 300px;
     height: 6px;
@@ -35,14 +35,14 @@
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.75);
 }
 
-.inputsFridgeAdd{
+.inputsFriendAdd{
     margin-top: 55px;
     display: flex;
     flex-direction: column;
     gap: 25px;
 }
 
-.inputFridgeAdd{
+.inputFriendAdd{
     display: flex;
     align-items: center;
     margin: auto;
@@ -52,7 +52,7 @@
     border-radius: 6px;
 }
 
-.inputFridgeAdd input{
+.inputFriendAdd input{
     height: 50px;
     width: 95%;
     background: transparent;
@@ -62,7 +62,7 @@
     font-size: 19px;
 }
 
-.inputFridgeAdd select{
+.inputFriendAdd select{
     height: 50px;
     width: 95%;
     background: transparent;
@@ -72,26 +72,7 @@
     font-size: 19px;
 }
 
-.inputFridgeAddAbout{
-    display: flex;
-    margin: auto;
-    width: 480px;
-    height: 180px;
-    background: #ebebeb;
-    border-radius: 6px;
-}
-
-.inputFridgeAddAbout textarea{
-    height: 98%;
-    width: 100%;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: #000000;
-    font-size: 19px;
-}
-
-.submitContainerFridgeAdd{
+.submitContainerFriendAdd{
     display: flex;
     gap: 30px;
     margin: 60px auto;

@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import "./App.css";
 import logo from "./logo_no_bg.png";
-import LoginSignup from "./loginSignup/loginSignup";
 import AddFoodItem from "./addFoodItem/addFoodItem";
+import AddFriend from "./addFriend/addFriend";
 
 import { useParams } from "react-router-dom";
 
@@ -16,8 +16,14 @@ function App() {
     setShowAddFoodItem(!showAddFoodItem);
   };
 
+  const [showAddFriend, setShowFriend] = useState(false);
+  const handleFriendButtonClick = () => {
+    setShowFriend(!showAddFriend);
+  };
+
   return (
     <div className="App">
+
       <nav className="navbar">
         <div>
           <img src={logo} id="logo" />
@@ -26,40 +32,47 @@ function App() {
           Welcome to your favourite Anti Food Waste App
         </div>
         <div className="username">
-          <ul>
-            <li>User: {username}</li>
-          </ul>
+          
+            User: {username}
+          
         </div>
       </nav>
+
       <div className="content">
-        <h2 id="fridge-list-header">
-          Fridge List
+
+        <div className="Fridge">
+          <h2 id="fridge-list-header">
+              Fridge List
+          </h2>
           <button id="add_item" onClick={handleFridgeButtonClick}>
-            Adaugă aliment
+              Adaugă aliment
           </button>
           {showAddFoodItem && <AddFoodItem />}
-        </h2>
-        <div>
           <ul id="Fridge_List">
             <li>Item 1</li>
           </ul>
         </div>
-        <h2 id="sharable-list-header">
-          Sharable List<button id="add_item">Adaugă aliment</button>
-        </h2>
-        <div>
+
+        <div className="Shareable">
+          <h2 id="sharable-list-header">
+              Sharable List
+          </h2>
           <ul id="Sharable_List">
             <li>Item 1</li>
           </ul>
         </div>
-        <h2 id="friends-list-header">
-          Friends List<button id="add_item">Adaugă prieten</button>
-        </h2>
-        <div>
+
+        <div className="Friends">
+          <h2 id="friends-list-header">
+              Friends List
+          </h2>
+          <button id="add_item" onClick={handleFriendButtonClick}>Adaugă prieten</button>
+          {showAddFriend && <AddFriend />}
           <ul id="Friend_List">
             <li>Item 1</li>
           </ul>
         </div>
+
       </div>
     </div>
   );

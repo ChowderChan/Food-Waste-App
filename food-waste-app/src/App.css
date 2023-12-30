@@ -41,10 +41,15 @@ body
 
 .content {
   display: flex;
+  flex-direction: column;
   justify-content: space-around;
   margin-top: 20px; 
   margin-left: 50px;
   margin-right: 50px;
+}
+
+h2{
+  text-align: center;
 }
 
 #fridge-list-header,
@@ -52,9 +57,12 @@ body
 #friends-list-header
 {
   color: rgba(0, 110, 52, 0.732);
-  margin-left: 150px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.35);
   text-align: center;
+}
+
+button{
+  margin:auto
 }
 
 #add_item
@@ -72,18 +80,25 @@ body
   font-weight: 700;
   cursor: pointer;
   margin-top: 30px;
-  /* margin-left: 55px; */
 }
 
-#Fridge_List,
-#Sharable_List,
-#Friend_List
-{
+ul {
   list-style: none;
-  color: black;
-  margin-left: -625%;
-  border: 3px solid;
-  padding: 10px 10px;
-  margin-top: 200px;
-  align-items: center;
+  padding: 0;
+  margin-left: 300px;
+  margin-right: 300px;
+}
+
+ul li {
+  background-color: #419c4d; 
+  color: #fff;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  transition: background-color 0.3s ease; 
+}
+
+ul li:hover {
+  background-color: #0c6318;
 }
