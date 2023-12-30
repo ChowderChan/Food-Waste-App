@@ -23,6 +23,10 @@ function App() {
     setShowFriend(!showAddFriend);
   };
 
+  const handleAddFoodItem = async (newItem) => {
+    setFridgeItemsList([...fridgeItems, newItem]);
+  };
+
   const [fridgeItems, setFridgeItemsList] = useState([]);
   useEffect(() => {
     axios
@@ -54,7 +58,7 @@ function App() {
           <button id="add_item" onClick={handleFridgeButtonClick}>
             Adaugă aliment
           </button>
-          {showAddFoodItem && <AddFoodItem />}
+          {showAddFoodItem && <AddFoodItem onAddFoodItem={handleAddFoodItem} />}
           <ul id="Fridge_List">
             {fridgeItems.map((item) => (
               <li key={item.id}>

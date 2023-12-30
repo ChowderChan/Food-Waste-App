@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./addFoodItem.css";
 import axios from "axios";
 
-const AddFoodItem = () => {
+const AddFoodItem = ({ onAddFoodItem }) => {
   const options = [
     { category: "Vegan" },
     { category: "Bio" },
@@ -30,7 +30,8 @@ const AddFoodItem = () => {
         }
       );
 
-      console.log(response.data);
+      let newItem = response.data.item;
+      onAddFoodItem(newItem);
     } catch (error) {
       console.error("Action failed", error.message);
     }

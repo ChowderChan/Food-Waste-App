@@ -46,12 +46,11 @@ db.run(`
   )
 `);
 
-
-// Cand cream o baza de date noua, comentam aceste 3 runuri de insert si abia dupa ce am pornit 
-// serverul si s-a creat baza de date, oprim serverul, decomentam cele 3 runnuri de insert si 
+// Cand cream o baza de date noua, comentam aceste 3 runuri de insert si abia dupa ce am pornit
+// serverul si s-a creat baza de date, oprim serverul, decomentam cele 3 runnuri de insert si
 // pornim iar serverul ca sa mearga, altfel eroare pentru ca runurile se apeleaza toate in acelasi
 // timp in loc sa fie apelate pas cu pas, in ordinea codului. Totodata, dupa ce a mers prima
-// inserare, trebuie iar comentate si iar pornit serverul pentru ca vom avea dubluri in tabela 
+// inserare, trebuie iar comentate si iar pornit serverul pentru ca vom avea dubluri in tabela
 // users altfel...
 
 // db.run(`
@@ -200,10 +199,17 @@ app.post("/addFridgeItems", (req, res) => {
     [idLoggedUser, option, name, date, about],
     (err) => {
       if (err) {
-        return res.status(500).json({ error: "Failed to add FoodItem" });
+        return res.status(500).json({ error: "Failed to add item" });
       }
-
-      res.json({ message: "Added foodItem succesfully" });
+      const newItem = {
+        idUser: idLoggedUser,
+        category: option,
+        name: name,
+        date: date,
+        about: about,
+        shareable: false,
+      };
+      res.json({ message: "Added item succesfully", item: newItem });
     }
   );
 });
@@ -211,62 +217,49 @@ app.post("/addFridgeItems", (req, res) => {
 app.post("/addFriend", (req, res) => {
   const { name, category } = req.body;
 
-  db.get(
-    "SELECT * FROM users WHERE username = ?",
-    [name],
-    (err1, row1) => {
-      if(err1)
-      {
-        return res.status(500).json({ error: "Failed to get list of items" });
-      }
-      else
-      {
-        if(row1)
-        {
-          db.get(
-            "SELECT * FROM friends WHERE name = ? AND idUser = ?",
-            [name, idLoggedUser],
-            (err2, row2) => {
-              if(err2)
-              {
-                console.error(err2.message);
-                return res.status(500).json({ error: "Failed to get list of items" });
-              }
-              else
-              {
-                if(!row2)
-                {
-                  db.run(
-                    "INSERT INTO friends (idUser, name, tag) VALUES (?, ?, ?)",
-                            [idLoggedUser, name, category],
-                            (err3) => {
-                        
-                              if (err3) {
-                                console.error(err3.message);
-                        
-                                return res.status(500).json({ error: "Failed to add friend"})
-                              }
-                        
-                              res.json({ message: "Added friend succesfully"});
-                            }
-                  );
-                }
-                else
-                {
-                  console.error("Prietenul exista deja in tabela!");
-                }
-              }
+  db.get("SELECT * FROM users WHERE username = ?", [name], (err1, row1) => {
+    if (err1) {
+      return res.status(500).json({ error: "Failed to get list of items" });
+    } else {
+      if (row1) {
+        db.get(
+          "SELECT * FROM friends WHERE name = ? AND idUser = ?",
+          [name, idLoggedUser],
+          (err2, row2) => {
+            if (err2) {
+              console.error(err2.message);
+              return res
+                .status(500)
+                .json({ error: "Failed to get list of items" });
+            } else {
+              if (!row2) {
+                db.run(
+                  "INSERT INTO friends (idUser, name, tag) VALUES (?, ?, ?)",
+                  [idLoggedUser, name, category],
+                  (err3) => {
+                    if (err3) {
+                      console.error(err3.message);
 
-            })
-        }
-        else
-        {
-          console.error("Utilizatorul nu exista!");
-        }
+                      return res
+                        .status(500)
+                        .json({ error: "Failed to add friend" });
+                    }
+
+                    res.json({ message: "Added friend succesfully" });
+                  }
+                );
+              } else {
+                console.error("Prietenul exista deja in tabela!");
+              }
+            }
+          }
+        );
+      } else {
+        console.error("Utilizatorul nu exista!");
       }
     }
-    );
-})
+  });
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
