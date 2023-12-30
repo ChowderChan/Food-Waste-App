@@ -9,7 +9,7 @@ const port = 5000;
 app.use(bodyParser.json());
 app.use(cors());
 
-const db = new sqlite3.Database('FoodWasteApp3.db'); // daca intampinam probleme cu POST, facem alt BD ( modificam numele bd-ului si apoi rulam iar node server.js )
+const db = new sqlite3.Database('FoodWasteApp5.db'); // daca intampinam probleme cu POST, facem alt BD ( modificam numele bd-ului si apoi rulam iar node server.js )
 
 // Assuming you have a 'users' table in the database with columns 'id', 'username', and 'password'
 
@@ -20,6 +20,28 @@ db.run(`
     username TEXT NOT NULL,
     password TEXT NOT NULL,
     phoneNumber TEXT NOT NULL
+  )
+`);
+
+db.run(`
+CREATE TABLE IF NOT EXISTS fridgeItems (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idUser INTEGER NOT NULL,
+  category TEXT NOT NULL,
+  name TEXT NOT NULL,
+  date TEXT NOT NULL,
+  about TEXT NOT NULL,
+  sharable BOOLEAN DEFAULT false, 
+  FOREIGN KEY (idUser) REFERENCES users(id)
+  )
+`);
+
+db.run(`
+CREATE TABLE IF NOT EXISTS friends (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idUser INTEGER NOT NULL,
+  tag TEXT NOT NULL,
+  FOREIGN KEY (idUser) REFERENCES users(id)
   )
 `);
 
