@@ -12,18 +12,19 @@ const AddFriend = () => {
         { category: "Carnivorous" },
       ];
 
-    const [option, setCategory] = useState("Category");
+    const [category, setCategory] = useState("Category");
     const changeOption = (event) => {
         setCategory(event.target.value);
       };
     
       const handleAddButtonClick = async () => {
+
         try {
           const response = await axios.post(
             "http://localhost:5000/addFriend",
             {
                 name,
-                option,
+                category,
             }
           );
     
@@ -49,7 +50,7 @@ const AddFriend = () => {
               />
             </div>
             <div className="inputFriendAdd">
-              <select value={option} onChange={changeOption}>
+              <select value={category} onChange={changeOption}>
                 <option onChange={(e) => changeOption(e.target.value)}>
                   Category
                 </option>
