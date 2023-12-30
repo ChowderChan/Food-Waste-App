@@ -9,7 +9,7 @@ const port = 5000;
 app.use(bodyParser.json());
 app.use(cors());
 
-const db = new sqlite3.Database('FoodWasteApp5.db'); // daca intampinam probleme cu POST, facem alt BD ( modificam numele bd-ului si apoi rulam iar node server.js )
+const db = new sqlite3.Database('FoodWasteApp6.db'); // daca intampinam probleme cu POST, facem alt BD ( modificam numele bd-ului si apoi rulam iar node server.js )
 
 // Assuming you have a 'users' table in the database with columns 'id', 'username', and 'password'
 
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS fridgeItems (
   name TEXT NOT NULL,
   date TEXT NOT NULL,
   about TEXT NOT NULL,
-  sharable BOOLEAN DEFAULT false, 
+  shareable BOOLEAN DEFAULT false,
   FOREIGN KEY (idUser) REFERENCES users(id)
   )
 `);
@@ -48,26 +48,34 @@ CREATE TABLE IF NOT EXISTS friends (
 app.post('/register', (req, res) => {
   const { username, password, phoneNumber } = req.body;
 
-  // Check if the username already exists
-  db.get('SELECT * FROM users WHERE username = ?', [username], (err, row) => {
-    if (err) {
-      return res.status(500).json({ error: 'Registration failed' });
-    }
-
-    // If the username already exists, return an error
-    if (row) {
-      return res.status(400).json({ error: 'Username already exists' });
-    }
-
-    // Insert the new user into the database
-    db.run('INSERT INTO users (username, password, phoneNumber) VALUES (?, ?, ?)', [username, password, phoneNumber], (err) => {
+  // Check if any of the required fields are empty
+  if (!username || !password || !phoneNumber) 
+  {
+    return res.status(400).json({ error: 'All fields must be filled out' });
+  }
+  else
+  {
+    // Check if the username already exists
+    db.get('SELECT * FROM users WHERE username = ?', [username], (err, row) => {
       if (err) {
         return res.status(500).json({ error: 'Registration failed' });
       }
 
-      res.json({ message: 'Registration successful' });
-    });
+      // If the username already exists, return an error
+      if (row) {
+        return res.status(400).json({ error: 'Username already exists' });
+      }
+
+      // Insert the new user into the database
+      db.run('INSERT INTO users (username, password, phoneNumber) VALUES (?, ?, ?)', [username, password, phoneNumber], (err) => {
+        if (err) {
+          return res.status(500).json({ error: 'Registration failed' });
+        }
+
+        res.json({ message: 'Registration successful' });
+      });
   });
+  }
 });
 
 app.post('/login', (req, res) => {
@@ -91,19 +99,6 @@ app.post('/login', (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
-const db2 = new sqlite3.Database('FoodWasteApp3.db');
-
-db2.run(`
-  CREATE TABLE IF NOT EXISTS fridgeItems (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    idUser INTEGER NOT NULL,
-    category TEXT NOT NULL,
-    name TEXT NOT NULL,
-    date TEXT NOT NULL,
-    about TEXT NOT NULL
-  )
-`);
 
 app.post('/addFridgeItems', (req, res) => {
   const { option, name, date, about } = req.body;
