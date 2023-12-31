@@ -40,6 +40,71 @@ function App() {
       });
   }, []);
 
+  const handleShareButtonClick = async (item) => {
+    try {
+      // Add the shared item to the shareList table
+      await axios.post(
+        "http://localhost:5000/addShareItems",
+        {
+          //idUser: item.idUser,
+          category: item.category,
+          name: item.name,
+          date: item.date,
+          about: item.about,
+          shareable: true,
+          
+        }
+      );
+
+      console.log("Category before API call:", item.category);
+      console.log("Category before API call:", item.name);
+
+  
+      // Remove the shared item from the fridgeItems table
+      // await axios.post(
+      //   "http://localhost:5000/removeFridgeItem",
+      //   {
+      //     itemId: item.id,
+      //   }
+      // );
+  
+      // Update the client-side state to reflect the changes
+      // setFridgeItemsList((prevFridgeItems) =>
+      //   prevFridgeItems.filter((fridgeItem) => fridgeItem.id !== item.id)
+      // );
+  
+      setShareItemsList((prevShareItems) => [
+        ...prevShareItems,
+        {
+          idUser: item.idUser,
+          category: item.category,
+          name: item.name,
+          date: item.date,
+          about: item.about,
+          shareable: true,
+        },
+      ]);
+    } catch (error) {
+      console.error("Action failed", error.message);
+    }
+  };
+
+  const [shareItems, setShareItemsList] = useState([]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/getShareItems")
+      .then((response) => {
+        const { shareItems: fetchedShareItems } = response.data;
+        setShareItemsList(fetchedShareItems);
+      })
+      .catch((error) => {
+        console.error("Error fetching fridge items: ", error.message);
+      });
+  }, []);
+
+  const shareSpan = document.createElement('span')
+  shareSpan.innerHTML = 'share'
+
   return (
     <div className="App">
       <nav className="navbar">
@@ -60,9 +125,9 @@ function App() {
           </button>
           {showAddFoodItem && <AddFoodItem onAddFoodItem={handleAddFoodItem} />}
           <ul id="Fridge_List">
-            {fridgeItems.map((item) => (
+            {fridgeItems && fridgeItems.map((item) => (
               <li key={item.id}>
-                {item.name} - {item.category} - {item.date} - {item.about}
+                {item.name} - {item.category} - {item.date} - {item.about} <span onClick={() => handleShareButtonClick(item)}>share</span>
               </li>
             ))}
           </ul>
@@ -71,8 +136,12 @@ function App() {
         <div className="Shareable">
           <h2 id="sharable-list-header">Sharable List</h2>
           <ul id="Sharable_List">
-            <li>Item 1</li>
-          </ul>
+            {shareItems && shareItems.map((item) => (
+              <li key={item.id}>
+                {item.name} - {item.category} - {item.date} - {item.about}
+              </li>
+            ))}
+        </ul>
         </div>
 
         <div className="Friends">

@@ -261,6 +261,72 @@ app.post("/addFriend", (req, res) => {
   });
 });
 
+app.get("/getShareItems", (req, res) => {
+  db.all(
+    "SELECT * FROM shareList WHERE idUser = ?",
+    [idLoggedUser],
+    (err, rows) => {
+      if (err) {
+        return res.status(500).json({ error: "Failed to get list of items" });
+      } else {
+        if (rows.length > 0) {
+          const shareItemsList = rows.map((row) => {
+            return {
+              id: row.id,
+              idUser: row.idUser,
+              category: row.category,
+              name: row.name,
+              date: row.date,
+              about: row.about,
+              shareable: row.shareable,
+            };
+          });
+
+          res.json({
+            message: "Login successful",
+            shareItems: shareItemsList,
+          });
+        } else {
+          res.json({
+            message: "Login successful",
+            shareItems: [],
+          });
+        }
+      }
+    }
+  );
+});
+
+app.post("/addShareItems", (req, res) => {
+  const { category, name, date, about, shareable } = req.body;
+
+  console.log("Received request to add shareable item:", req.body);
+
+  //cel mai probail aici se pierde category-ul
+  db.run(
+    "INSERT INTO shareList (idUser, category, name, date, about, shareable) VALUES (?, ?, ?, ?, ?, ?)",
+    [idLoggedUser, category, name, date, about, shareable],
+    (err) => {
+      if (err) {
+        console.error("Failed to add item to shareList:", err.message);
+        return res.status(500).json({ error: "Failed to add item" });
+      }
+
+      const newItem = {
+        idUser: idLoggedUser,
+        category: category,
+        name: name,
+        date: date,
+        about: about,
+        shareable: shareable,
+      };
+      console.log("Added item to shareList successfully");
+      res.json({ message: "Added item successfully", item: newItem });
+    }
+  );
+});
+
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

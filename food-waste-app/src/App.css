@@ -97,8 +97,23 @@ ul li {
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
   transition: background-color 0.3s ease; 
+  cursor: pointer;
 }
 
 ul li:hover {
   background-color: #0c6318;
+}
+
+ul li span{
+  /* position: absolute; */
+  width: 50px;
+  text-align: center;
+  background: #DAF7A6;
+  float: right;
+  cursor: pointer;
+  display: flex;
+}
+
+ul li span:hover {
+  background-color: #01280d;
 }
