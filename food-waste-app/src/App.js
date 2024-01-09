@@ -27,7 +27,12 @@ function App() {
     setFridgeItemsList([...fridgeItems, newItem]);
   };
 
+  const handleAddFriend = async (newFriend) => {
+    setFriendsList([...friendsList, newFriend]);
+  };
+
   const [fridgeItems, setFridgeItemsList] = useState([]);
+  const [friendsList, setFriendsList] = useState([]);
   useEffect(() => {
     axios
       .get("http://localhost:5000/getFridgeItems")
@@ -40,26 +45,34 @@ function App() {
       });
   }, []);
 
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/getFriends")
+      .then((response) => {
+        const { friendsList: fetchedFriends } = response.data;
+        setFriendsList(fetchedFriends);
+        console.log(fetchedFriends);
+      })
+      .catch((error) => {
+        console.error("Error fetching friends list: ", error.message);
+      });
+  }, []);
+
   const handleShareButtonClick = async (item) => {
     try {
       // Add the shared item to the shareList table
-      await axios.post(
-        "http://localhost:5000/addShareItems",
-        {
-          //idUser: item.idUser,
-          category: item.category,
-          name: item.name,
-          date: item.date,
-          about: item.about,
-          shareable: true,
-          
-        }
-      );
+      await axios.post("http://localhost:5000/addShareItems", {
+        //idUser: item.idUser,
+        category: item.category,
+        name: item.name,
+        date: item.date,
+        about: item.about,
+        shareable: true,
+      });
 
       console.log("Category before API call:", item.category);
       console.log("Category before API call:", item.name);
 
-  
       // Remove the shared item from the fridgeItems table
       // await axios.post(
       //   "http://localhost:5000/removeFridgeItem",
@@ -67,12 +80,12 @@ function App() {
       //     itemId: item.id,
       //   }
       // );
-  
+
       // Update the client-side state to reflect the changes
       // setFridgeItemsList((prevFridgeItems) =>
       //   prevFridgeItems.filter((fridgeItem) => fridgeItem.id !== item.id)
       // );
-  
+
       setShareItemsList((prevShareItems) => [
         ...prevShareItems,
         {
@@ -102,8 +115,8 @@ function App() {
       });
   }, []);
 
-  const shareSpan = document.createElement('span')
-  shareSpan.innerHTML = 'share'
+  const shareSpan = document.createElement("span");
+  shareSpan.innerHTML = "share";
 
   return (
     <div className="App">
@@ -125,23 +138,28 @@ function App() {
           </button>
           {showAddFoodItem && <AddFoodItem onAddFoodItem={handleAddFoodItem} />}
           <ul id="Fridge_List">
-            {fridgeItems && fridgeItems.map((item) => (
-              <li key={item.id}>
-                {item.name} - {item.category} - {item.date} - {item.about} <span onClick={() => handleShareButtonClick(item)}>share</span>
-              </li>
-            ))}
+            {fridgeItems &&
+              fridgeItems.map((item) => (
+                <li key={item.id}>
+                  {item.name} - {item.category} - {item.date} - {item.about}{" "}
+                  <span onClick={() => handleShareButtonClick(item)}>
+                    share
+                  </span>
+                </li>
+              ))}
           </ul>
         </div>
 
         <div className="Shareable">
-          <h2 id="sharable-list-header">Sharable List</h2>
+          <h2 id="sharable-list-header">Shareable List</h2>
           <ul id="Sharable_List">
-            {shareItems && shareItems.map((item) => (
-              <li key={item.id}>
-                {item.name} - {item.category} - {item.date} - {item.about}
-              </li>
-            ))}
-        </ul>
+            {shareItems &&
+              shareItems.map((item) => (
+                <li key={item.id}>
+                  {item.name} - {item.category} - {item.date} - {item.about}
+                </li>
+              ))}
+          </ul>
         </div>
 
         <div className="Friends">
@@ -149,9 +167,14 @@ function App() {
           <button id="add_item" onClick={handleFriendButtonClick}>
             Adaugă prieten
           </button>
-          {showAddFriend && <AddFriend />}
+          {showAddFriend && <AddFriend onAddFriend={handleAddFriend} />}
           <ul id="Friend_List">
-            <li>Item 1</li>
+            {friendsList &&
+              friendsList.map((friend) => (
+                <li key={friend.id}>
+                  {friend.name} - {friend.tag}
+                </li>
+              ))}
           </ul>
         </div>
       </div>
