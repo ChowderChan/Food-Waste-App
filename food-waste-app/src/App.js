@@ -60,7 +60,6 @@ function App() {
 
   const handleShareButtonClick = async (item) => {
     try {
-      // Add the shared item to the shareList table
       await axios.post("http://localhost:5000/addShareItems", {
         //idUser: item.idUser,
         category: item.category,
