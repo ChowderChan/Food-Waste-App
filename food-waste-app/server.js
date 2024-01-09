@@ -9,7 +9,7 @@ const port = 5000;
 app.use(bodyParser.json());
 app.use(cors());
 
-const db = new sqlite3.Database("FoodWasteApp13.db"); // daca intampinam probleme cu POST, facem alt BD ( modificam numele bd-ului si apoi rulam iar node server.js )
+const db = new sqlite3.Database("FoodWasteApp14.db"); // daca intampinam probleme cu POST, facem alt BD ( modificam numele bd-ului si apoi rulam iar node server.js )
 
 // Assuming you have a 'users' table in the database with columns 'id', 'username', and 'password'
 
@@ -44,6 +44,32 @@ db.run(`
   tag TEXT NOT NULL,
   FOREIGN KEY (idUser) REFERENCES users(id)
   )
+`);
+
+db.run(`
+    CREATE TABLE IF NOT EXISTS shareList (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    idUser INTEGER NOT NULL,
+    category TEXT NOT NULL,
+    name TEXT NOT NULL,
+    date TEXT NOT NULL,
+    about TEXT NOT NULL,
+    shareable BOOLEAN DEFAULT true,
+    FOREIGN KEY (idUser) REFERENCES users(id)
+    )
+`);
+
+db.run(`
+    CREATE TABLE IF NOT EXISTS friendsShareList (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    idUser INTEGER NOT NULL,
+    category TEXT NOT NULL,
+    name TEXT NOT NULL,
+    date TEXT NOT NULL,
+    about TEXT NOT NULL,
+    shareable BOOLEAN DEFAULT true,
+    FOREIGN KEY (idUser) REFERENCES users(id)
+    )
 `);
 
 // Cand cream o baza de date noua, comentam aceste 3 runuri de insert si abia dupa ce am pornit
