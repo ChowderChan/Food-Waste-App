@@ -473,38 +473,42 @@ app.post("/addShareItems", (req, res) => {
 
 app.get("/getUserData", (req, res) => {
   const friendId = req.query.friendId;
-  db.get(
-    "SELECT * FROM users WHERE id = ?",
-    [friendId],
-    (err, row) => {
-      if (err) {
-        return res.status(500).json({ error: "Failed to get list of items" });
-      } else {
-        if(row)
-        {
-          const userData = 
-          {
-            id: row.id,
-            username: row.username,
-            password: row.password,
-            phoneNumber: row.phoneNumber,
-          };
+  db.get("SELECT * FROM users WHERE id = ?", [friendId], (err, row) => {
+    if (err) {
+      return res.status(500).json({ error: "Failed to get list of items" });
+    } else {
+      if (row) {
+        const userData = {
+          id: row.id,
+          username: row.username,
+          password: row.password,
+          phoneNumber: row.phoneNumber,
+        };
 
         res.json({
           message: "User data is here",
           userData: userData,
         });
-        }
-        else{
-          res.json({
-            message: "User data is here",
-            userData: [],
-          });
-        }
-        }
+      } else {
+        res.json({
+          message: "User data is here",
+          userData: [],
+        });
       }
-    
-  );
+    }
+  });
+});
+
+app.delete("/deleteSharedItem/:itemId", (req, res) => {
+  const itemId = req.params.itemId;
+
+  db.run("DELETE FROM shareList WHERE id = ?", [itemId], (err) => {
+    if (err) {
+      console.error(err.message);
+      return res.status(500).json({ error: "Failed to delete shared item" });
+    }
+    res.json({ message: "Shared item deleted successfully" });
+  });
 });
 
 app.listen(port, () => {
