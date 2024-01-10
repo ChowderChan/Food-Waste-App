@@ -471,6 +471,42 @@ app.post("/addShareItems", (req, res) => {
   );
 });
 
+app.get("/getUserData", (req, res) => {
+  const friendId = req.query.friendId;
+  db.get(
+    "SELECT * FROM users WHERE id = ?",
+    [friendId],
+    (err, row) => {
+      if (err) {
+        return res.status(500).json({ error: "Failed to get list of items" });
+      } else {
+        if(row)
+        {
+          const userData = 
+          {
+            id: row.id,
+            username: row.username,
+            password: row.password,
+            phoneNumber: row.phoneNumber,
+          };
+
+        res.json({
+          message: "User data is here",
+          userData: userData,
+        });
+        }
+        else{
+          res.json({
+            message: "User data is here",
+            userData: [],
+          });
+        }
+        }
+      }
+    
+  );
+});
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

@@ -171,6 +171,54 @@ function App() {
   const shareSpan = document.createElement("span");
   shareSpan.innerHTML = "share";
 
+  const [userData, setUserData] = useState([])
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/getUserData", {
+        params: {
+          friendId: userData.id,
+        },
+      }) 
+      .then((response) => {
+        const { userData: fetchedUserData } = response.data;
+        setUserData(fetchedUserData);
+      })
+      .catch((error) => {
+        console.error("Error fetching fridge items: ", error.message);
+      });
+  }, [])
+
+  const showUserData = (idUser) =>{
+
+    axios
+      .get("http://localhost:5000/getUserData", {
+        params: {
+          friendId: idUser,
+        },
+      }) 
+      .then((response) => {
+        const { userData: fetchedUserData } = response.data;
+        setUserData(fetchedUserData);
+      })
+      .catch((error) => {
+        console.error("Error fetching fridge items: ", error.message);
+      });
+    // const user = userData.find(user => user.id === idUser);
+    // setVisibleLists((prevVisibleLists) => ({
+    //   ...prevVisibleLists,
+    //   [idUser]: !prevVisibleLists[idUser],
+    // }));
+    console.log('pula me in gura ta')
+    if (userData) {
+      console.log("User data:", userData);
+      const string = `The item has been claimed. Contact the user ${userData.username}, their phone number is ${userData.phoneNumber}`
+      alert(string)
+      // Aici poți face ce vrei cu datele utilizatorului, de exemplu, le poți afișa în componentă sau le poți prelucra în alt mod.
+    } else {
+      console.log("User not found");
+    }
+  }
+  
   return (
     <div className="App">
       <nav className="navbar">
@@ -236,6 +284,9 @@ function App() {
                           <li key={item.id}>
                             {item.name} - {item.category} - {item.date} -{" "}
                             {item.about}
+                            <span onClick={(e)=>showUserData(item.idUser)}>
+                              claim
+                            </span>
                           </li>
                         ))}
                     </ul>
