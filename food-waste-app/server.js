@@ -270,8 +270,15 @@ app.post("/addFriend", (req, res) => {
                         .status(500)
                         .json({ error: "Failed to add friend" });
                     }
-
-                    res.json({ message: "Added friend succesfully" });
+                    const newFriend = {
+                      name: name,
+                      idUser: idLoggedUser,
+                      tag: category,
+                    };
+                    res.json({
+                      message: "Added friend succesfully",
+                      friend: newFriend,
+                    });
                   }
                 );
               } else {
@@ -321,6 +328,79 @@ app.get("/getShareItems", (req, res) => {
       }
     }
   );
+});
+
+app.get("/getSharedList", (req, res) => {
+  const friendId = req.query.friendId;
+
+  console.log("Received request to get shared list. ", req.body);
+
+  db.get("SELECT * FROM friends WHERE id = ?", [friendId], (err1, row1) => {
+    if (err1) {
+      return res
+        .status(500)
+        .json({ error: "Failed to get friend from friends" });
+    } else {
+      if (row1) {
+        const friendName = row1.name;
+        db.get(
+          "SELECT * FROM users WHERE username = ?",
+          [friendName],
+          (err2, row2) => {
+            if (err2) {
+              console.error(err2.message);
+              return res
+                .status(500)
+                .json({ error: "Failed to get friend from users" });
+            } else {
+              if (row2) {
+                const friendUserId = row2.id;
+                db.all(
+                  "SELECT * FROM shareList WHERE idUser = ? AND shareable = ?",
+                  [friendUserId, true],
+                  (err3, rows) => {
+                    if (err3) {
+                      return res
+                        .status(500)
+                        .json({ error: "Failed to get friend's shared list" });
+                    } else {
+                      if (rows.length > 0) {
+                        const sharedItemsList = rows.map((row) => {
+                          return {
+                            id: row.id,
+                            idUser: row.idUser,
+                            category: row.category,
+                            name: row.name,
+                            date: row.date,
+                            about: row.about,
+                            shareable: row.shareable,
+                          };
+                        });
+
+                        res.json({
+                          message: "Retrieved friend's shared list",
+                          sharedItems: sharedItemsList,
+                        });
+                      } else {
+                        res.json({
+                          message: "Retrieved friend's shared list",
+                          sharedItems: [],
+                        });
+                      }
+                    }
+                  }
+                );
+              } else {
+                console.error("Error getting friend's shared list");
+              }
+            }
+          }
+        );
+      } else {
+        console.error("No friend with that id");
+      }
+    }
+  });
 });
 
 app.post("/addShareItems", (req, res) => {

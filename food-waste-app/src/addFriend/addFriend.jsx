@@ -23,7 +23,7 @@ const AddFriend = ({ onAddFriend }) => {
         category,
       });
 
-      let newFriend = response.data.item;
+      let newFriend = response.data.friend;
       onAddFriend(newFriend);
     } catch (error) {
       console.error("Action failed", error.message);

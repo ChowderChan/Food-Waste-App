@@ -33,6 +33,7 @@ function App() {
 
   const [fridgeItems, setFridgeItemsList] = useState([]);
   const [friendsList, setFriendsList] = useState([]);
+
   useEffect(() => {
     axios
       .get("http://localhost:5000/getFridgeItems")
@@ -49,14 +50,40 @@ function App() {
     axios
       .get("http://localhost:5000/getFriends")
       .then((response) => {
-        const { friendsList: fetchedFriends } = response.data;
+        const { friends: fetchedFriends } = response.data;
         setFriendsList(fetchedFriends);
-        console.log(fetchedFriends);
       })
       .catch((error) => {
         console.error("Error fetching friends list: ", error.message);
       });
   }, []);
+
+  const [visibleLists, setVisibleLists] = useState({});
+  const [sharedLists, setSharedLists] = useState({});
+  const toggleSharedListVisibility = (friendId) => {
+    setVisibleLists((prevVisibleLists) => ({
+      ...prevVisibleLists,
+      [friendId]: !prevVisibleLists[friendId],
+    }));
+    axios
+      .get("http://localhost:5000/getSharedList", {
+        params: {
+          friendId: friendId,
+        },
+      })
+      .then((response) => {
+        const { sharedItems } = response.data;
+        console.log(response.data);
+        setSharedLists((prevSharedLists) => ({
+          ...prevSharedLists,
+          [friendId]: sharedItems,
+        }));
+        console.log(sharedLists[friendId]);
+      })
+      .catch((error) => {
+        console.error("Error fetching shared list: ", error.message);
+      });
+  };
 
   const handleShareButtonClick = async (item) => {
     try {
@@ -170,8 +197,22 @@ function App() {
           <ul id="Friend_List">
             {friendsList &&
               friendsList.map((friend) => (
-                <li key={friend.id}>
+                <li
+                  key={friend.id}
+                  onClick={() => toggleSharedListVisibility(friend.id)}
+                >
                   {friend.name} - {friend.tag}
+                  {visibleLists[friend.id] && (
+                    <ul>
+                      {sharedLists[friend.id] &&
+                        sharedLists[friend.id].map((item) => (
+                          <li key={item.id}>
+                            {item.name} - {item.category} - {item.date} -{" "}
+                            {item.about}
+                          </li>
+                        ))}
+                    </ul>
+                  )}
                 </li>
               ))}
           </ul>
