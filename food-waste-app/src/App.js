@@ -33,6 +33,7 @@ function App() {
 
   const [fridgeItems, setFridgeItemsList] = useState([]);
   const [friendsList, setFriendsList] = useState([]);
+  const [expiringItems, setExpiringItems] = useState([]);
 
   useEffect(() => {
     axios
@@ -57,6 +58,32 @@ function App() {
         console.error("Error fetching friends list: ", error.message);
       });
   }, []);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/getExpiringItems")
+      .then((response) => {
+        console.log("updated expiring list");
+        const { expiringItemsList: fetchedExpiringItems } = response.data;
+        setExpiringItems(fetchedExpiringItems);
+      })
+      .catch((error) => {
+        console.error("Error fetching expiring items: ", error.message);
+      });
+  }, []);
+
+  const [alerted, setAlerted] = useState(false);
+  useEffect(() => {
+    if (expiringItems.length > 0 && alerted === false) {
+      let message = "Items about to expire:\n";
+      expiringItems.forEach((item) => {
+        console.log(item);
+        message += `\nItem ${item.name} expires on ${item.date}.`;
+      });
+      setAlerted(true);
+      alert(message);
+    }
+  }, [expiringItems]);
 
   const [visibleLists, setVisibleLists] = useState({});
   const [sharedLists, setSharedLists] = useState({});

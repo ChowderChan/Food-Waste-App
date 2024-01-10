@@ -126,6 +126,8 @@ app.post("/register", (req, res) => {
 });
 
 let idLoggedUser;
+const currentDate = new Date().toISOString().split("T")[0];
+
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
 
@@ -177,6 +179,43 @@ app.get("/getFridgeItems", (req, res) => {
           res.json({
             message: "Login successful",
             fridgeItems: [],
+          });
+        }
+      }
+    }
+  );
+});
+
+app.get("/getExpiringItems", (req, res) => {
+  db.all(
+    "SELECT * FROM fridgeItems WHERE idUser = ? AND date <= date(?, '+7 days')",
+    [idLoggedUser, currentDate],
+    (err, rows) => {
+      if (err) {
+        return res
+          .status(500)
+          .json({ error: "Failed to get list of expiring items" });
+      } else {
+        if (rows.length > 0) {
+          const expiringItems = rows.map((row) => {
+            return {
+              id: row.id,
+              idUser: row.idUser,
+              category: row.category,
+              name: row.name,
+              date: row.date,
+              about: row.about,
+              shareable: row.shareable,
+            };
+          });
+          res.json({
+            message: "Got list of expiring items",
+            expiringItemsList: expiringItems,
+          });
+        } else {
+          res.json({
+            message: "Got list of expiring items",
+            expiringItemsList: [],
           });
         }
       }
