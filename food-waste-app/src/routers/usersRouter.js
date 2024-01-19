@@ -16,7 +16,6 @@ usersRouter.get('/allUsers', async (request, response, next) => {
         response.sendStatus(204)
       }
     } catch (error) {
-      next(error) // use the next optional parameter
-      // to pass control to the next middleware function if defined (it is, in app.js)
+      next(error)
     }
   })

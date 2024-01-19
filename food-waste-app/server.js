@@ -11,8 +11,6 @@ app.use(cors());
 
 const db = new sqlite3.Database("FoodWasteApp14.db"); // daca intampinam probleme cu POST, facem alt BD ( modificam numele bd-ului si apoi rulam iar node server.js )
 
-// Assuming you have a 'users' table in the database with columns 'id', 'username', and 'password'
-
 // Create the users table if it doesn't exist
 db.run(`
   CREATE TABLE IF NOT EXISTS users (

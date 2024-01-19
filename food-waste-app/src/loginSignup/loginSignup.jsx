@@ -13,38 +13,36 @@ const LoginSignup = () => {
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
 
-  // Use the useNavigate function to get access to the navigation function
-  const navigate = useNavigate(); // Replace useHistory with useNavigate
+  const navigate = useNavigate();
 
   const handleAction = async () => {
     try {
       if (action === "Sign Up") {
-        // Make a POST request to the server endpoint for registration
+        
         const response = await axios.post("http://localhost:5000/register", {
           username,
           password,
           phoneNumber,
         });
 
-        console.log(response.data); // Assuming your server returns a response
+        console.log(response.data);
 
-        // Handle successful registration, e.g., redirect to login page or show a success message
+        
       } else {
-        // Make a POST request to the server endpoint for login
+        
         const response = await axios.post("http://localhost:5000/login", {
           username,
           password,
         });
 
-        console.log(response.data); // Assuming your server returns a response
+        console.log(response.data); 
 
-        // Handle successful login, e.g., redirect to the home page or show a success message
-        // Redirect to the main page (App.js) with the username parameter
+        
         navigate(`/app/${username}`);
       }
     } catch (error) {
       console.error("Action failed", error.message);
-      // Handle action failure, e.g., show an error message
+      
     }
   };
 

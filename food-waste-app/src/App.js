@@ -10,7 +10,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 
 function App() {
-  // Use the useParams hook to get access to the route parameters
+  
   const { username } = useParams();
 
   const [showAddFoodItem, setShowAddFoodItem] = useState(false);
@@ -34,6 +34,53 @@ function App() {
   const [fridgeItems, setFridgeItemsList] = useState([]);
   const [friendsList, setFriendsList] = useState([]);
   const [expiringItems, setExpiringItems] = useState([]);
+
+  // For sharing on Facebook
+  // useEffect(() => {
+  //   window.fbAsyncInit = function() {
+  //     window.FB.init({
+  //       //appId: '',
+  //       autoLogAppEvents: true,
+  //       xfbml: true,
+  //       version: 'v13.0',
+  //     });
+  //   };
+  
+  //   // Load the Facebook SDK asynchronously
+  //   (function(d, s, id) {
+  //     var js, fjs = d.getElementsByTagName(s)[0];
+  //     if (d.getElementById(id)) return;
+  //     js = d.createElement(s); js.id = id;
+  //     js.src = 'https://connect.facebook.net/en_US/sdk.js';
+  //     fjs.parentNode.insertBefore(js, fjs);
+  //   }(document, 'script', 'facebook-jssdk'));
+  // }, []);
+
+  // For sharing on Facebook too...
+  const handleFacebookShare = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/getShareItems");
+      const shareableItems = response.data.shareItems;
+
+      //console.log(shareableItems);
+  
+      const shareableItemsText = shareableItems.map(item => `${item.name} - ${item.category} - ${item.date} - ${item.about}`).join('\n');
+      //console.log(shareableItemsText);
+      const message = `Check out my shareable items:\n${shareableItemsText}`;
+      //console.log(message); // bine pana aici
+      //const shareUrl = `https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(message)}`;
+    
+      const currentUrl = window.location.href;
+      const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}&quote=${encodeURIComponent(message)}`;
+
+      window.open(shareUrl, '_blank');
+    } catch (error) {
+      //console.error("Failed to fetch shareable items:", error.message);
+    }
+  };
+
+
+
 
   useEffect(() => {
     axios
@@ -228,6 +275,7 @@ function App() {
         </div>
 
         <div className="Shareable">
+        <button style={{marginLeft: "45%"}} onClick={handleFacebookShare}>Share on Facebook</button>
           <h2 id="sharable-list-header">Shareable List</h2>
           <ul id="Sharable_List">
             {shareItems &&
